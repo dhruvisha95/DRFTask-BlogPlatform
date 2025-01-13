@@ -1,6 +1,8 @@
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from blogs.models import Blog
+from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from .serializers import BlogPostSerializer, BlogSerializer, CommentSerializer
@@ -13,9 +15,35 @@ class BlogAPI(APIView):
        permission_classes = [IsAuthenticated]
        authentication_classes = [TokenAuthentication]
 
-       def get(sel,request):
-           blogs = BlogSerializer(Blog.objects.all(), many = True).data
-           return Response(blogs)
+       def get(self,request):
+            blogs = Blog.objects.all()  
+
+            author = request.query_params.get('author')
+            category = request.query_params.get('category')
+            tags = request.query_params.get('tags') 
+
+            if author:
+                blogs = blogs.filter(author=author)
+            if category:
+                blogs = blogs.filter(category=category)
+            if tags:
+                for tag in tags:
+                    blogs = blogs.filter(tags=tag)
+
+            search_query = request.query_params.get('search')
+            if search_query:
+                blogs = blogs.filter(
+                    Q(title__icontains=search_query) |
+                    Q(blog_content__icontains=search_query) |
+                    Q(tags__tag__icontains=search_query) |
+                    Q(category__category__icontains=search_query)
+                ).distinct()
+       
+            paginator = PageNumberPagination()  
+            paginator.page_size = 2
+            paginated_blogs = paginator.paginate_queryset(blogs, request)  
+            serializer = BlogSerializer(paginated_blogs, many=True)  
+            return paginator.get_paginated_response(serializer.data)  
 
        def post(self, request):
         data = request.data
@@ -26,4 +54,16 @@ class BlogAPI(APIView):
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
        
+class CommentAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request):
+        data = request.data
+        author = self.request.user
+        serializer = CommentSerializer(data = data)
+        if serializer.is_valid():
+            serializer.save(author = author)
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 

@@ -19,11 +19,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
-    author = CustomUserSerialzer()
-
     class Meta:
         model = Comments
-        fields = ['comment']
+        fields = ['comment','blog']
 
 class BlogPostSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
@@ -52,6 +50,6 @@ class BlogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blog
-        fields = ['title', 'publication_date', 'blog_content', 'category', 'tags', 'comments']
+        fields = ['author','title', 'publication_date', 'blog_content', 'category', 'tags', 'comments']
 
 
