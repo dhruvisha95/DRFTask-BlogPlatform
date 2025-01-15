@@ -42,6 +42,22 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
         return blog
     
+    def update(self, instance, validated_data):
+        tags_data = validated_data.pop('tags', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if tags_data is not None:
+            tags = []
+            for tag_data in tags_data:
+                tag, _ = Tag.objects.get_or_create(tag=tag_data['tag'])
+                tags.append(tag)
+            instance.tags.set(tags)
+
+        instance.save()
+        return instance
+    
 class BlogSerializer(serializers.ModelSerializer):
 
     tags = TagSerializer(many = True)
