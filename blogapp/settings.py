@@ -28,6 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env(env_file=BASE_DIR / ".env")
+
 
 # Application definition
 
@@ -70,6 +76,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = 587
+print(EMAIL_PORT)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_HOST_USER') 
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') 
+DEFAULT_FROM_EMAIL=env('DEFAULT_FROM_EMAIL')
+
 ROOT_URLCONF = 'blogapp.urls'
 
 TEMPLATES = [
@@ -91,14 +107,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'blogapp.wsgi.application'
 
 AUTH_USER_MODEL = "users.CustomUser"
-
-
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-
-environ.Env.read_env(env_file=BASE_DIR / ".env")
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

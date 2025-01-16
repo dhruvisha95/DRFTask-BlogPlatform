@@ -89,7 +89,6 @@ class BlogGetUpdateDeleteAPI(APIView):
             blog = Blog.objects.get(pk=blog_id)
         except Blog.DoesNotExist:
             return Response({"Blog not found."}, status=status.HTTP_404_NOT_FOUND)
-        print(request.user,"  ",blog.author)
         if request.user != blog.author:
                 return Response(
                     {"permission denied"},
@@ -112,10 +111,10 @@ class CommentAPI(APIView):
         serializer = CommentSerializer(data = data)
         if serializer.is_valid():
             serializer.save(author = author)
-            subject = "New Blog Post Created"
-            message = "A new blog titled  has been created."
-            # recipient_list = [self.blog.author.email]  
-            # send_notification_email(subject, message, recipient_list)
+            subject = "New comment added to your article"
+            message = "New comment added to your article"
+            recipient_list = [self.request.user.email]  
+            send_notification_email(subject, message, recipient_list)
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
