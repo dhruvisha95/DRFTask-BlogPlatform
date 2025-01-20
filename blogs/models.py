@@ -15,16 +15,22 @@ class Tag(models.Model):
         return str(self.tag)
     
 class Blog(models.Model):
+
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    ]
+
     title = models.CharField(max_length=500)
     publication_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="blogs")
     category= models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True,related_name="blogs")
+    status = models.CharField(choices=STATUS_CHOICES, default='draft')
     blog_content = models.TextField()
     tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return str(self.title)
-
 
 class Comments(models.Model):
     comment = models.TextField()

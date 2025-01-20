@@ -18,7 +18,7 @@ class BlogAPI(APIView):
        authentication_classes = [TokenAuthentication]
 
        def get(self,request):
-            blogs = Blog.objects.all()  
+            blogs = Blog.objects.filter(status='published')  
 
             author = request.query_params.get('author')
             category = request.query_params.get('category')
@@ -49,12 +49,28 @@ class BlogAPI(APIView):
 
        def post(self, request):
         data = request.data
-        author = self.request.user
-        serializer = BlogPostSerializer(data = data)
-        if serializer.is_valid():
-            serializer.save(author = author)
-            return Response(serializer.data)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        blog_status = data.get('status')
+
+        if(blog_status=='publish'):
+            id = data.get('id')
+
+            try:
+                blog = Blog.objects.get(pk=id)
+            except:
+                return Response({'error': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
+            
+            blog.status = 'publish'  
+            blog.save() 
+            
+            return Response({"Blog published"}, status=status.HTTP_200_OK)
+            
+        else:
+            author = self.request.user
+            serializer = BlogPostSerializer(data = data)
+            if serializer.is_valid():
+                serializer.save(author = author)
+                return Response(serializer.data)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
        
 
 class BlogGetUpdateDeleteAPI(APIView):

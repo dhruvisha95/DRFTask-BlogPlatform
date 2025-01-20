@@ -3,7 +3,6 @@ from .models import Blog, Comments, Tag, Category
 from users.serializers import CustomUserSerialzer
 from users.models import CustomUser
 
-
 class TagSerializer(serializers.ModelSerializer):
     
     class Meta:
