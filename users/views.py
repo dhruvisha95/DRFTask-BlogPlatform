@@ -8,6 +8,14 @@ from users.serializers import LoginSerializer, RegisterSerializer
 
 # Create your views here.
 class RegisterAPI(APIView): 
+    """
+    API endpoint that allows users to register.
+    Methods
+    -------
+    post(request):
+        If the data is valid, saves the new user and returns a success message.
+        If the data is invalid, returns the validation errors.
+    """
     permission_classes = [AllowAny]
     
     def post(self, request):
@@ -19,6 +27,13 @@ class RegisterAPI(APIView):
         return Response({'error' : serializer.errors},status=status.HTTP_400_BAD_REQUEST)
     
 class LoginAPI(APIView): 
+    """
+    LoginAPI class handles user login requests.
+    Methods:
+        post(request):
+            Returns a success message and user details if authentication is successful.
+            Returns an error message if authentication fails.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
