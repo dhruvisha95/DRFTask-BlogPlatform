@@ -16,14 +16,15 @@ class RegisterSerializer(serializers.ModelSerializer):
                                               bio = validated_data.get('bio')
                                             )
         return user
-
-    # def validate(self, data):
-    #     if data['email']:
-    #         if CustomUser.objects.filter(email = data['email']).exists():
-    #             raise serializers.ValidationError('Email already exists')
-    #         return data
         
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()    
     password = serializers.CharField()
+
+
+class CustomUserSerialzer(serializers.ModelSerializer):
+    email = serializers.EmailField()   
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'name', 'bio', 'picture', 'phone_number']
