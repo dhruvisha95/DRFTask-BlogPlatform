@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @Component({
   selector: 'app-root',

@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { type User } from '../user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {FormGroup, FormControl} from '@angular/forms';

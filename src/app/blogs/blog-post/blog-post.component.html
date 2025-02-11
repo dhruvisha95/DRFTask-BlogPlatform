@@ -1,0 +1,53 @@
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create a New Blog Post</h2>
+  
+    <form [formGroup]="blogForm" (ngSubmit)="submitBlog()" class="space-y-4">
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Title:</label>
+        <input type="text" formControlName="title" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+      </div>
+  
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Publication Date:</label>
+        <input type="date" formControlName="publication_date" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+  
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Author:</label>
+        <input type="text" formControlName="author" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+  
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Category:</label>
+        <input type="text" formControlName="category" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+  
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Status:</label>
+        <select formControlName="status" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="Draft">Draft</option>
+          <option value="Published">Published</option>
+        </select>
+      </div>
+  
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Blog Content:</label>
+        <textarea formControlName="blog_content" rows="4" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+      </div>
+  
+      <!-- <div>
+        <label class="block text-gray-700 font-semibold mb-1">Tags:</label>
+        <div *ngFor="let tag of tags.controls; let i = index" class="flex items-center space-x-2 mb-2">
+          <input type="text" [formControl]="tag.get('tag')" class="p-3 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button type="button" (click)="removeTag(i)" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600">Remove</button>
+        </div>
+        <button type="button" (click)="addTag()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">+ Add Tag</button>
+      </div> -->
+  
+  
+      <button type="submit" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition duration-200">
+        Submit Blog
+      </button>
+    </form>
+  </div>
+  
